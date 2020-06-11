@@ -64,6 +64,9 @@ export class ClickerComponent implements OnInit {
   }
 
   public gather() {
+    if (this.gatherDelay > 0)
+      return;
+
     var chunkGet = (Math.floor(Math.random() * 10) + 3) * ((this.minions + 1) + this.carts);
     this.chunks += chunkGet;
     this.messageService.add("You feel around in the darkness and find " + (chunkGet == 0 ? "no" : chunkGet) + " more chunks.");
@@ -71,6 +74,9 @@ export class ClickerComponent implements OnInit {
   }
 
   public hire() {
+    if (this.chunks < this.minionCost)
+      return;
+
     this.chunks -= this.minionCost;
     this.minions++;
     this.minionCost += 15;
@@ -78,6 +84,9 @@ export class ClickerComponent implements OnInit {
   }
 
   public scavenge() {
+    if (this.minions < 1)
+      return;
+
     this.minions--;
     this.minionCap--;
     var scavengeTime = Math.floor(Math.random() * 20) + 10;
@@ -85,6 +94,10 @@ export class ClickerComponent implements OnInit {
   }
 
   public cart() {
+    this.setButtonStates();
+    if (this.cartButtonDisabled)
+      return;
+
     this.items[ItemNames.Wheel].qty--;
     this.items[ItemNames.Plank].qty--;
     this.items[ItemNames.Nails].qty--;
@@ -93,6 +106,10 @@ export class ClickerComponent implements OnInit {
   }
 
   public hut() {
+    this.setButtonStates();
+    if (this.hutButtonDisabled)
+      return;
+
     this.items[ItemNames.Plank].qty -= 2;
     this.items[ItemNames.Nails].qty--;
     this.minionCap += 5;
@@ -100,6 +117,10 @@ export class ClickerComponent implements OnInit {
   }
 
   public feeder() {
+    this.setButtonStates();
+    if (this.feederButtonDisabled)
+      return;
+
     this.items[ItemNames.Gear].qty--;
     this.items[ItemNames.Plank].qty -= 2;
     this.items[ItemNames.Nails].qty--;
@@ -159,6 +180,22 @@ export class ClickerComponent implements OnInit {
     }
 
     // button logic
+    this.setButtonStates();
+
+    // game state
+    if (this.ticks % 60 == 0) {
+      switch (this.gameState) {
+        case 0: this.messageService.add("You hear a group of lesser creatures take up residence nearby. A stong vision pierces your mind. They will help you in exchange for chunks."); break;
+        case 1: this.messageService.add("The creatures send a vision to your mind. They may be able to scavenge useful bits of scrap. It could prove useful, but is it worth the scrifice?"); break;
+        case 2: this.messageService.add("A stroke of pure, undeserved luck. Your fingers can identify a hammer among some chunks. It's a bit shoddy, but it will get the job done."); break;
+        case 5: this.messageService.add("A minion calls out. He's found something. It's a dilapidated workbench. This should allow for more complex projects."); break;
+      }
+      this.gameState++;
+    }
+
+  }
+
+  public setButtonStates() {
     this.minionButtonDisabled =
       this.chunks < this.minionCost ||
       this.minions > this.minionCap;
@@ -177,20 +214,6 @@ export class ClickerComponent implements OnInit {
       this.items[ItemNames.Plank].qty < 2 ||
       this.items[ItemNames.Nails].qty < 1 ||
       this.items[ItemNames.Jar].qty < 1;
-
-
-    // game state
-    if (this.ticks % 60 == 0)
-    {
-      switch (this.gameState) {
-        case 0: this.messageService.add("You hear a group of lesser creatures take up residence nearby. A stong vision pierces your mind. They will help you in exchange for chunks."); break;
-        case 1: this.messageService.add("The creatures send a vision to your mind. They may be able to scavenge useful bits of scrap. It could prove useful, but is it worth the scrifice?"); break;
-        case 2: this.messageService.add("A stroke of pure, undeserved luck. Your fingers can identify a hammer among some chunks. It's a bit shoddy, but it will get the job done."); break;
-        case 5: this.messageService.add("A minion calls out. He's found something. It's a dilapidated workbench. This should allow for more complex projects."); break;
-      }
-      this.gameState++;
-    }
-
   }
 
 }
