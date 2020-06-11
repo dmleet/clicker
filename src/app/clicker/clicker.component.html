@@ -1,0 +1,27 @@
+
+<div class="grid-container">
+    <div class="grid-item">
+        <p aria-live="polite">Number fed: <strong>{{ clicks }}</strong></p>
+        <p aria-live="polite">Held chunks: <strong>{{ chunks }}</strong></p>
+        <p aria-live="polite" *ngIf="gameState > 0">Minions: <strong>{{ minions }}/{{ minionCap }}</strong></p>
+        <p aria-live="polite" *ngIf="gameState > 1">Scavengers: <strong>{{ scavengers.length }}</strong></p>
+        <p aria-live="polite" *ngIf="carts > 0">Carts: <strong>{{ carts }}</strong></p>
+        <p aria-live="polite" *ngIf="feeders > 0">Feeders: <strong>{{ feeders }}</strong></p>
+    </div>
+    <div *ngIf="gameState > 1" class="grid-item">
+        <div *ngFor="let item of items">
+            <p *ngIf="item.qty > 0" aria-live="polite">{{ item.name }}: <strong>{{ item.qty }}</strong></p>
+        </div>
+    </div>
+</div>
+<br />
+
+<div class="grid-container">
+    <button class="grid-item" [disabled]="chunks < 1" (click)="click()">Feed the beast</button>
+    <button class="grid-item" [disabled]="gatherDelay > 0" (click)="gather()">{{ gatherDelay > 0 ? gatherDelay : "Gather more chunks" }}</button>
+    <button class="grid-item" *ngIf="gameState > 0" [disabled]="minionButtonDisabled" (click)="hire()">Hire minion ({{ minionCost }})</button>
+    <button class="grid-item" *ngIf="gameState > 1" [disabled]="minions < 1" (click)="scavenge()">Scavenge</button>
+    <button class="grid-item" *ngIf="gameState > 2" [disabled]="hutButtonDisabled" (click)="hut()">Build a hut</button>
+    <button class="grid-item" *ngIf="gameState > 2" [disabled]="cartButtonDisabled" (click)="cart()">Construct a cart</button>
+    <button class="grid-item" *ngIf="gameState > 5" [disabled]="feederButtonDisabled" (click)="feeder()">Make a feeder</button>
+</div>

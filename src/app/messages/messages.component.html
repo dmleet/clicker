@@ -1,0 +1,8 @@
+<div *ngIf="messageService.messages.length">
+
+	<h2>Log</h2>
+	<ul>
+		<li *ngFor="let message of messageService.messages.reverse()"> {{ message }} </li>
+	</ul>
+
+</div>

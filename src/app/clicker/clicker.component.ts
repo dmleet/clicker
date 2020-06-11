@@ -1,0 +1,196 @@
+import { Component, OnInit } from '@angular/core';
+
+import { interval, Subscription } from 'rxjs';
+
+import { Item } from '../item';
+import { ItemService } from '../item.service';
+import { MessageService } from '../message.service';
+import { ItemNames } from '../items';
+
+@Component({
+  selector: 'app-clicker',
+  templateUrl: './clicker.component.html',
+  styleUrls: ['./clicker.component.css']
+})
+export class ClickerComponent implements OnInit {
+  subscription: Subscription;
+
+  gameState = 0;
+
+  carts = 0;
+  clicks = 0;
+  chunks = 10;
+  ticks = 0;
+  hunger = 10;
+  minions = 0;
+  minionCap = 5;
+  feeders = 0;
+  minionCost = 15;
+  scavengers: number[] = [];
+  items: Item[];
+
+
+  gatherDelay = 0;
+  cartButtonDisabled = true;
+  minionButtonDisabled = true;
+  hutButtonDisabled = true;
+  feederButtonDisabled = true;
+
+  lastHunger = 10;
+
+  constructor(
+    private itemService: ItemService, 
+    private messageService: MessageService) { }
+
+  ngOnInit(): void {
+    const source = interval(1000);
+    this.subscription = source.subscribe(val => this.tick());
+
+    this.itemService.getItems().subscribe(items => this.items = items);
+
+    console.log(this.items.length);
+
+    this.messageService.add("You awake in a dark void. A feeling of pure hunger wraps its tendrils around your mind.");
+  }
+
+  public click() {
+    this.clicks++;
+    this.chunks--;
+
+    if (this.hunger < -10) {
+      return;
+    }
+    this.hunger--;
+  }
+
+  public gather() {
+    var chunkGet = (Math.floor(Math.random() * 10) + 3) * ((this.minions + 1) + this.carts);
+    this.chunks += chunkGet;
+    this.messageService.add("You feel around in the darkness and find " + (chunkGet == 0 ? "no" : chunkGet) + " more chunks.");
+    this.gatherDelay = 10;
+  }
+
+  public hire() {
+    this.chunks -= this.minionCost;
+    this.minions++;
+    this.minionCost += 15;
+    this.messageService.add("You come to an understanding. The beast will eat us all before long...");
+  }
+
+  public scavenge() {
+    this.minions--;
+    this.minionCap--;
+    var scavengeTime = Math.floor(Math.random() * 20) + 10;
+    this.scavengers.push(scavengeTime);
+  }
+
+  public cart() {
+    this.items[ItemNames.Wheel].qty--;
+    this.items[ItemNames.Plank].qty--;
+    this.items[ItemNames.Nails].qty--;
+    this.carts++;
+    this.messageService.add("A makeshift cart with a single wheel. It should improve productivity.");
+  }
+
+  public hut() {
+    this.items[ItemNames.Plank].qty -= 2;
+    this.items[ItemNames.Nails].qty--;
+    this.minionCap += 5;
+    this.messageService.add("A hut of weathered planks should help attract more creatures. You will need their help despite the smell.");
+  }
+
+  public feeder() {
+    this.items[ItemNames.Gear].qty--;
+    this.items[ItemNames.Plank].qty -= 2;
+    this.items[ItemNames.Nails].qty--;
+    this.items[ItemNames.Jar].qty--;
+    this.feeders++;
+    this.messageService.add("The gear hums your new feeder slowly transfers chunks into the beast's gaping maw. A brief respite is welcome.");
+  }
+
+  public tick() {
+    this.ticks++;
+    this.hunger++;
+
+    // failure conditions
+    if (this.hunger > 100) {
+      if (this.minions > 0) {
+        this.hunger -= 50;
+        this.clicks += 50;
+        this.minions--;
+        this.messageService.add("The beast has eaten one of your minions...");
+      }
+      else {
+        this.messageService.add("YOU DIED.");
+        return;
+      }
+    }
+
+    // cooldowns
+    if (this.gatherDelay > 0) this.gatherDelay--;
+
+    // beast hunger
+    if (this.ticks % 10 == 0) {
+      if (this.hunger > 89) {
+        this.messageService.add("The beast is COMING FOR YOU!.");
+      } else if (this.hunger > 49) {
+        this.messageService.add("The beast is ravenous.");
+      } else if (this.hunger > 9) {
+        this.messageService.add("The beast is hungy.");
+      } else {
+        this.messageService.add("The beast is quiet.");
+      }
+    }
+
+    // scavenger items
+    if (this.scavengers.length > 0) {
+      this.scavengers = this.scavengers.sort(function(a, b) { return a - b });
+      for (let i = 0; i < this.scavengers.length; i++) {
+        this.scavengers[i]--;
+      }
+      if (this.scavengers[0] < 1) {
+        this.minions++;
+        this.minionCap++;
+        var id = this.itemService.getRandomItemId()
+        this.items[id - 1].qty++;
+        this.messageService.add("A minion has returned with a " + this.items[id - 1].name);
+        this.scavengers.shift();
+      }
+    }
+
+    // button logic
+    this.minionButtonDisabled =
+      this.chunks < this.minionCost ||
+      this.minions > this.minionCap;
+
+    this.hutButtonDisabled =
+      this.items[ItemNames.Plank].qty < 2 ||
+      this.items[ItemNames.Nails].qty < 1
+
+    this.cartButtonDisabled = 
+      this.items[ItemNames.Wheel].qty < 1 || 
+      this.items[ItemNames.Nails].qty < 1 || 
+      this.items[ItemNames.Plank].qty < 1;
+
+    this.feederButtonDisabled =
+      this.items[ItemNames.Gear].qty < 1 ||
+      this.items[ItemNames.Plank].qty < 2 ||
+      this.items[ItemNames.Nails].qty < 1 ||
+      this.items[ItemNames.Jar].qty < 1;
+
+
+    // game state
+    if (this.ticks % 60 == 0)
+    {
+      switch (this.gameState) {
+        case 0: this.messageService.add("You hear a group of lesser creatures take up residence nearby. A stong vision pierces your mind. They will help you in exchange for chunks."); break;
+        case 1: this.messageService.add("The creatures send a vision to your mind. They may be able to scavenge useful bits of scrap. It could prove useful, but is it worth the scrifice?"); break;
+        case 2: this.messageService.add("A stroke of pure, undeserved luck. Your fingers can identify a hammer among some chunks. It's a bit shoddy, but it will get the job done."); break;
+        case 5: this.messageService.add("A minion calls out. He's found something. It's a dilapidated workbench. This should allow for more complex projects."); break;
+      }
+      this.gameState++;
+    }
+
+  }
+
+}
