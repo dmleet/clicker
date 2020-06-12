@@ -48,7 +48,7 @@ export class ClickerComponent implements OnInit {
 
         this.itemService.getItems().subscribe(items => this.items = items);
 
-        this.messageService.add("You awake in a *scary:dark void.* A feeling of *visual:pure hunger* wraps its tendrils around your mind.");
+        this.messageService.add("You awake in a *scary:dark void.* A feeling of *visual:pure hunger* wraps its *slanted:tendrils* around your mind.");
     }
 
     // button fuctions
@@ -143,7 +143,7 @@ export class ClickerComponent implements OnInit {
                 this.hunger -= 50;
                 this.clicks += 50;
                 this.minions--;
-                this.messageService.add("The beast has *scary:TaKeN* one of your minions...8");
+                this.messageService.add("The beast has *slanted:TaKeN* one of your minions...8");
             }
             else {
                 this.messageService.add("*scary:YOU DIED.*");
@@ -157,7 +157,7 @@ export class ClickerComponent implements OnInit {
         // beast hunger
         if (this.ticks % 10 == 0) {
             if (this.hunger > 79) {
-                this.messageService.add("The beast is *scary:CoMinG fOR YoU!*");
+                this.messageService.add("The beast is *scary:CoMiNG FoR YOu!!*");
             } else if (this.hunger > 49) {
                 this.messageService.add("The beast is *visual:ravenous.*");
             } else if (this.hunger > 9) {

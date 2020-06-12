@@ -10,7 +10,7 @@
 .slanted {
   font-family: Arial, Helvetica, sans-serif;
   font-style: italic;
-  color: #44107A;
+  color: #824bbd;
 }
 
 .visual {
@@ -31,7 +31,6 @@
 
 .scary {
   position: relative;
-  text-transform: uppercase;
   font-weight: bold;
   color: white;
   display: inline-block;

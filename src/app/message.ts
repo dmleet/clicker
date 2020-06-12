@@ -57,7 +57,7 @@ export class Message {
                         case "bold": style = MessageStyle.Bold; break;
                         case "scary": style = MessageStyle.Scary; break;
                         case "visual": style = MessageStyle.Visual; break;
-                        case "stanted": style = MessageStyle.Slanted; break;
+                        case "slanted": style = MessageStyle.Slanted; break;
                         case "error": style = MessageStyle.Error; break;
                     }
                     this.parts.push(new MessagePart(items[1], style));
