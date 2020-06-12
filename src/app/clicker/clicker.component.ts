@@ -15,28 +15,26 @@ import { ItemNames } from '../items';
 export class ClickerComponent implements OnInit {
   subscription: Subscription;
 
-  gameState = 0;
-
+  // game vars
   carts = 0;
   clicks = 0;
   chunks = 10;
-  ticks = 0;
-  hunger = 10;
-  minions = 0;
-  minionCap = 5;
   feeders = 0;
-  minionCost = 15;
-  scavengers: number[] = [];
-  items: Item[];
-
-
   gatherDelay = 0;
+  gameState = 0;
+  hunger = 10;
+  items: Item[];
+  minionCap = 5;
+  minionCost = 15;
+  minions = 0;
+  scavengers: number[] = [];
+  ticks = 0;
+
+  // button status vars
   cartButtonDisabled = true;
   minionButtonDisabled = true;
   hutButtonDisabled = true;
   feederButtonDisabled = true;
-
-  lastHunger = 10;
 
   constructor(
     private itemService: ItemService, 
@@ -48,11 +46,10 @@ export class ClickerComponent implements OnInit {
 
     this.itemService.getItems().subscribe(items => this.items = items);
 
-    console.log(this.items.length);
-
-    this.messageService.add("You awake in a dark void. A feeling of pure hunger wraps its tendrils around your mind.");
+    this.messageService.add("You awake in a *scary:dark void.* A feeling of *visual:pure hunger* wraps its tendrils around your mind.");
   }
 
+  // button fuctions
   public click() {
     this.clicks++;
     this.chunks--;
@@ -69,7 +66,7 @@ export class ClickerComponent implements OnInit {
 
     var chunkGet = (Math.floor(Math.random() * 10) + 3) * ((this.minions + 1) + this.carts);
     this.chunks += chunkGet;
-    this.messageService.add("You feel around in the darkness and find " + (chunkGet == 0 ? "no" : chunkGet) + " more chunks.");
+    this.messageService.add("You feel around in the darkness and find *bold:" + chunkGet + " more chunks.*");
     this.gatherDelay = 10;
   }
 
@@ -129,9 +126,11 @@ export class ClickerComponent implements OnInit {
     this.messageService.add("The gear hums your new feeder slowly transfers chunks into the beast's gaping maw. A brief respite is welcome.");
   }
 
+  // the tick
   public tick() {
     this.ticks++;
     this.hunger++;
+
 
     // failure conditions
     if (this.hunger > 100) {
@@ -139,10 +138,10 @@ export class ClickerComponent implements OnInit {
         this.hunger -= 50;
         this.clicks += 50;
         this.minions--;
-        this.messageService.add("The beast has eaten one of your minions...");
+        this.messageService.add("The beast has *scary:TaKeN* one of your minions...8");
       }
       else {
-        this.messageService.add("YOU DIED.");
+        this.messageService.add("*scary:YOU DIED.*");
         return;
       }
     }
@@ -153,9 +152,9 @@ export class ClickerComponent implements OnInit {
     // beast hunger
     if (this.ticks % 10 == 0) {
       if (this.hunger > 89) {
-        this.messageService.add("The beast is COMING FOR YOU!.");
+        this.messageService.add("The beast is *scary:COMING FOR YOU!*");
       } else if (this.hunger > 49) {
-        this.messageService.add("The beast is ravenous.");
+        this.messageService.add("The beast is *visual:ravenous.*");
       } else if (this.hunger > 9) {
         this.messageService.add("The beast is hungy.");
       } else {
@@ -174,7 +173,7 @@ export class ClickerComponent implements OnInit {
         this.minionCap++;
         var id = this.itemService.getRandomItemId()
         this.items[id - 1].qty++;
-        this.messageService.add("A minion has returned with a " + this.items[id - 1].name);
+        this.messageService.add("A minion has returned with a *bold:" + this.items[id - 1].name + "*");
         this.scavengers.shift();
       }
     }
@@ -195,7 +194,8 @@ export class ClickerComponent implements OnInit {
 
   }
 
-  public setButtonStates() {
+  // set button states
+  private setButtonStates() {
     this.minionButtonDisabled =
       this.chunks < this.minionCost ||
       this.minions > this.minionCap;

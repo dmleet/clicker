@@ -11,7 +11,7 @@ import { ItemComponent } from './item/item.component';
     AppComponent,
     ClickerComponent,
     MessagesComponent,
-    ItemComponent
+    ItemComponent,
   ],
   imports: [
     BrowserModule
