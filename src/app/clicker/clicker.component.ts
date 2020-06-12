@@ -53,11 +53,11 @@ export class ClickerComponent implements OnInit {
   public click() {
     this.clicks++;
     this.chunks--;
-
     if (this.hunger < -10) {
       return;
     }
     this.hunger--;
+    this.setButtonStates();
   }
 
   public gather() {
@@ -68,6 +68,7 @@ export class ClickerComponent implements OnInit {
     this.chunks += chunkGet;
     this.messageService.add("You feel around in the darkness and find *bold:" + chunkGet + " more chunks.*");
     this.gatherDelay = 10;
+    this.setButtonStates();
   }
 
   public hire() {
@@ -77,7 +78,8 @@ export class ClickerComponent implements OnInit {
     this.chunks -= this.minionCost;
     this.minions++;
     this.minionCost += 15;
-    this.messageService.add("You come to an understanding. The beast will eat us all before long...");
+    this.messageService.add("You come to an understanding. *slanted:The beast will eat us all before long...*");
+    this.setButtonStates();
   }
 
   public scavenge() {
@@ -88,10 +90,10 @@ export class ClickerComponent implements OnInit {
     this.minionCap--;
     var scavengeTime = Math.floor(Math.random() * 20) + 10;
     this.scavengers.push(scavengeTime);
+    this.setButtonStates();
   }
 
   public cart() {
-    this.setButtonStates();
     if (this.cartButtonDisabled)
       return;
 
@@ -100,10 +102,10 @@ export class ClickerComponent implements OnInit {
     this.items[ItemNames.Nails].qty--;
     this.carts++;
     this.messageService.add("A makeshift cart with a single wheel. It should improve productivity.");
+    this.setButtonStates();
   }
 
   public hut() {
-    this.setButtonStates();
     if (this.hutButtonDisabled)
       return;
 
@@ -111,10 +113,10 @@ export class ClickerComponent implements OnInit {
     this.items[ItemNames.Nails].qty--;
     this.minionCap += 5;
     this.messageService.add("A hut of weathered planks should help attract more creatures. You will need their help despite the smell.");
+    this.setButtonStates();
   }
 
   public feeder() {
-    this.setButtonStates();
     if (this.feederButtonDisabled)
       return;
 
@@ -123,7 +125,8 @@ export class ClickerComponent implements OnInit {
     this.items[ItemNames.Nails].qty--;
     this.items[ItemNames.Jar].qty--;
     this.feeders++;
-    this.messageService.add("The gear hums your new feeder slowly transfers chunks into the beast's gaping maw. A brief respite is welcome.");
+    this.messageService.add("The gear hums, *slanted:your new feeder slowly transfers chunks into the beast's gaping maw.* A brief respite is welcome.");
+    this.setButtonStates();
   }
 
   // the tick
@@ -152,7 +155,7 @@ export class ClickerComponent implements OnInit {
     // beast hunger
     if (this.ticks % 10 == 0) {
       if (this.hunger > 79) {
-        this.messageService.add("The beast is *scary:COMING FOR YOU!*");
+        this.messageService.add("The beast is *scary:CoMinG fOR YoU!*");
       } else if (this.hunger > 49) {
         this.messageService.add("The beast is *visual:ravenous.*");
       } else if (this.hunger > 9) {

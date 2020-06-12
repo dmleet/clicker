@@ -30,7 +30,7 @@ button:active {
 
 .grid-container {
   display: grid;
-  width: 50%;
+  width: 40em;
   grid-template-columns: 50% 50%;
   background-color: #12171b;
   padding: 6px;
