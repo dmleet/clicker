@@ -11,7 +11,7 @@ import { RandomService } from '../random.service';
 @Component({
     selector: 'app-clicker',
     templateUrl: './clicker.component.html',
-    styleUrls: ['./clicker.component.css']
+    styleUrls: ['./clicker.component.scss']
 })
 export class ClickerComponent implements OnInit {
     subscription: Subscription;
@@ -22,13 +22,13 @@ export class ClickerComponent implements OnInit {
     chunks = 10;
     feeders = 0;
     gatherDelay = 0;
-    gameState = 0;
+    gameState = 6;
     hunger = 10;
     items: Item[];
-    minionCap = 5;
+    minionCap = 3;
     minionCost = 15;
     minions = 0;
-    scavengers: number[] = [];
+    scavengers: number[] = [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ];
     ticks = 0;
 
     // button status vars
@@ -113,8 +113,8 @@ export class ClickerComponent implements OnInit {
 
         this.items[ItemNames.Plank].qty -= 2;
         this.items[ItemNames.Nails].qty--;
-        this.minionCap += 5;
-        this.messageService.add("A hut of weathered planks should help attract more creatures. You will need their help despite the smell.");
+        this.minionCap += 3;
+        this.messageService.add("A hut of weathered planks should help attract more creatures. You will need their help despite the *slanted:smell.*");
         this.setButtonStates();
     }
 
@@ -181,6 +181,12 @@ export class ClickerComponent implements OnInit {
                 this.messageService.add("A minion has returned with a *bold:" + this.items[id - 1].name + "*");
                 this.scavengers.shift();
             }
+        }
+
+        // feeders
+        if (this.ticks % 5 && this.feeders > 0) {
+            this.chunks -= this.feeders;
+            this.hunger += this.feeders;
         }
 
         // button logic

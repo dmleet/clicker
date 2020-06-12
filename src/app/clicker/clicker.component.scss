@@ -1,3 +1,5 @@
+@import "../../variables.scss";
+
 p {
   margin: .5em 0;
   font-weight: bold;
@@ -11,11 +13,11 @@ button {
 }
 
 button:hover {
-  background-color: #4c6928 !important;
+  background-color: $color5 !important;
 }
 
 button:disabled {
-  background-color: #32362d !important;
+  background-color: $color3 !important;
   color: #ccc;
   cursor: not-allowed;
 }
@@ -25,21 +27,21 @@ button:focus {
 }
 
 button:active {
-  background-color: #32362d !important;
+  background-color: $color3 !important;
 }
 
 .grid-container {
   display: grid;
   width: 40em;
   grid-template-columns: 50% 50%;
-  background-color: #12171b;
+  background-color: $color1;
   padding: 6px;
   cursor: default;
 }
 
 .grid-item {
-  background-color: #474B4F;
-  border: 6px solid #12171b;
+  background-color: $color4;
+  border: 6px solid $color1;
   padding: 15px;
   font-size: 18px;
   text-align: center;
