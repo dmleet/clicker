@@ -4,20 +4,21 @@ import { Observable, of } from 'rxjs';
 
 import { Item } from './item';
 import { ITEMS } from './items';
+import { RandomService } from './random.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ItemService {
 
-  constructor() { }
+  constructor(private randomService: RandomService) { }
 
   getItems(): Observable<Item[]> {
     return of(ITEMS);
   }
 
   getRandomItemId() {
-    let random = Math.floor(Math.random() * 100);
+    let random = Math.floor(this.randomService.getNext() * 100);
     let rarity = 3;
     if (random < 65) {
       rarity = 1
@@ -26,7 +27,7 @@ export class ItemService {
     }
 
     let items = ITEMS.filter(i => i.rarity == rarity);
-    let index = Math.floor(Math.random() * items.length);
+    let index = Math.floor(this.randomService.getNext() * items.length);
 
     return items[index].id;
   }
