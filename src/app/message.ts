@@ -31,14 +31,12 @@ export class Message {
     private parse(content: string) {
         const SYM = '*';
         const DELIM = ':';
-        console.log("----" + content);
 
         // No special parts
         let splitted = content.split(SYM);
         if (splitted.length == 1)
         {
             this.parts.push(new MessagePart(content, MessageStyle.Normal));
-            console.log("no special parts");
             return;
         }
 

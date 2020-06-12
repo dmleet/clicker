@@ -151,7 +151,7 @@ export class ClickerComponent implements OnInit {
 
     // beast hunger
     if (this.ticks % 10 == 0) {
-      if (this.hunger > 89) {
+      if (this.hunger > 79) {
         this.messageService.add("The beast is *scary:COMING FOR YOU!*");
       } else if (this.hunger > 49) {
         this.messageService.add("The beast is *visual:ravenous.*");
