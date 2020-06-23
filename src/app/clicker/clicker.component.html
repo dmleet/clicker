@@ -1,5 +1,7 @@
-
-<div class="grid-container">
+<div [ngClass]="titleClass">
+    <h1>Feed The Beast...</h1>
+</div>
+<div [ngClass]="containerClass">
     <div class="grid-item">
         <p aria-live="polite">Number fed: <strong>{{ clicks }}</strong></p>
         <p aria-live="polite">Held chunks: <strong>{{ chunks }}</strong></p>
@@ -16,12 +18,12 @@
 </div>
 <br />
 
-<div class="grid-container">
-    <button class="grid-item" [disabled]="chunks < 1" (click)="click()">Feed the beast</button>
-    <button class="grid-item" [disabled]="gatherDelay > 0" (click)="gather()">{{ gatherDelay > 0 ? gatherDelay : "Gather more chunks" }}</button>
-    <button class="grid-item" *ngIf="gameState > 0" [disabled]="minionButtonDisabled" (click)="hire()">Hire minion ({{ minionCost }})</button>
-    <button class="grid-item" *ngIf="gameState > 1" [disabled]="minions < 1" (click)="scavenge()">Scavenge</button>
-    <button class="grid-item" *ngIf="gameState > 2" [disabled]="hutButtonDisabled" (click)="hut()">Build a hut</button>
-    <button class="grid-item" *ngIf="gameState > 2" [disabled]="cartButtonDisabled" (click)="cart()">Construct a cart</button>
-    <button class="grid-item" *ngIf="gameState > 5" [disabled]="feederButtonDisabled" (click)="feeder()">Make a feeder</button>
+<div [ngClass]="containerClass">
+    <button [ngClass]="buttonClass" [disabled]="chunks < 1" (click)="click()">Feed the beast</button>
+    <button [ngClass]="buttonClass" [disabled]="gatherDelay > 0" (click)="gather()">{{ gatherDelay > 0 ? gatherDelay : "Gather more chunks" }}</button>
+    <button [ngClass]="buttonClass" *ngIf="gameState > 0" [disabled]="minionButtonDisabled" (click)="hire()">Hire minion ({{ minionCost }})</button>
+    <button [ngClass]="buttonClass" *ngIf="gameState > 1" [disabled]="minions < 1" (click)="scavenge()">Scavenge</button>
+    <button [ngClass]="buttonClass" *ngIf="gameState > 2" [disabled]="hutButtonDisabled" (click)="hut()">Build a hut</button>
+    <button [ngClass]="buttonClass" *ngIf="gameState > 2" [disabled]="cartButtonDisabled" (click)="cart()">Construct a cart</button>
+    <button [ngClass]="buttonClass" *ngIf="gameState > 5" [disabled]="feederButtonDisabled" (click)="feeder()">Make a feeder</button>
 </div>

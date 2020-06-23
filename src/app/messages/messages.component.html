@@ -1,8 +1,8 @@
 <div *ngIf="messageService.messages.length" class="fadeout">
 
-	<h2>Log</h2>
+	<br /><br />
 
-	<div *ngFor="let msg of messageService._messages.reverse()" class="message">
+	<div *ngFor="let msg of messageService.messages.reverse()" class="message">
 		<span *ngFor="let part of msg.parts" [class]="part.style.toString()">
 			{{ part.content }}
 		</span>

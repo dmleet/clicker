@@ -49,14 +49,14 @@
                     #44107A,
                     #FF1361,
                     #FFF800);
-  animation: .8s shake infinite alternate;
+  animation: .8s wiggle infinite alternate;
 }
 
-@keyframes shake {
-  0% { transform: skewX(-15deg); }
-  5% { transform: skewX(15deg); }
-  10% { transform: skewX(-15deg); }
-  15% { transform: skewX(15deg); }
+@keyframes wiggle {
+  0% { transform: skewX(-10deg); }
+  5% { transform: skewX(10deg); }
+  10% { transform: skewX(-10deg); }
+  15% { transform: skewX(10deg); }
   20% { transform: skewX(0deg); }
   100% { transform: skewX(0deg); }  
 }
