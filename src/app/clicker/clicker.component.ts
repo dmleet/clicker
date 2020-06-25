@@ -255,7 +255,7 @@ export class ClickerComponent implements OnInit {
     private setButtonStates() {
         this.minionButtonDisabled =
             this.chunks < this.minionCost ||
-            this.minions > this.minionCap;
+            this.minions >= this.minionCap;
 
         this.hutButtonDisabled =
             this.items[ItemNames.Plank].qty < 2 ||
